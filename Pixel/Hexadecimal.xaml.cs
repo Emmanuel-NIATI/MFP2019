@@ -33,7 +33,7 @@ namespace Pixel
         private Brush SCB_Green;
         private Brush SCB_Blue;
 
-        Button btnSelected;
+        String btnSelected;
 
         private bool b47;
         private bool b46;
@@ -103,7 +103,7 @@ namespace Pixel
 
             // Gestion des variables
 
-            btnSelected = affh01;
+            btnSelected = "BTN_AFFH01";
 
             affh01.Content = "0"; affh01.Background = SCB_White; affh01.BorderBrush = SCB_Black;
             affh00.Content = "0"; affh00.Background = SCB_White; affh00.BorderBrush = SCB_Black;
@@ -212,15 +212,19 @@ namespace Pixel
 
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-
-            this.initialiser();
-
-        }
-
         private void afficher()
         {
+
+            if (btnSelected.Equals("BTN_AFFH01")) { affh01.BorderThickness = new Thickness(2.0); } else { affh01.BorderThickness = new Thickness(1.0); }
+            if (btnSelected.Equals("BTN_AFFH00")) { affh00.BorderThickness = new Thickness(2.0); } else { affh00.BorderThickness = new Thickness(1.0); }
+            if (btnSelected.Equals("BTN_AFFH11")) { affh11.BorderThickness = new Thickness(2.0); } else { affh11.BorderThickness = new Thickness(1.0); }
+            if (btnSelected.Equals("BTN_AFFH10")) { affh10.BorderThickness = new Thickness(2.0); } else { affh10.BorderThickness = new Thickness(1.0); }
+            if (btnSelected.Equals("BTN_AFFH21")) { affh21.BorderThickness = new Thickness(2.0); } else { affh21.BorderThickness = new Thickness(1.0); }
+            if (btnSelected.Equals("BTN_AFFH20")) { affh20.BorderThickness = new Thickness(2.0); } else { affh20.BorderThickness = new Thickness(1.0); }
+            if (btnSelected.Equals("BTN_AFFH31")) { affh31.BorderThickness = new Thickness(2.0); } else { affh31.BorderThickness = new Thickness(1.0); }
+            if (btnSelected.Equals("BTN_AFFH30")) { affh30.BorderThickness = new Thickness(2.0); } else { affh30.BorderThickness = new Thickness(1.0); }
+            if (btnSelected.Equals("BTN_AFFH41")) { affh41.BorderThickness = new Thickness(2.0); } else { affh41.BorderThickness = new Thickness(1.0); }
+            if (btnSelected.Equals("BTN_AFFH40")) { affh40.BorderThickness = new Thickness(2.0); } else { affh40.BorderThickness = new Thickness(1.0); }
 
             bool[] b0H = Convert.ConvertHexToBin(affh01.Content.ToString());
             bool[] b0L = Convert.ConvertHexToBin(affh00.Content.ToString());
@@ -342,57 +346,104 @@ namespace Pixel
             if (b01) { btn01.Background = SCB_Color; btn01.BorderBrush = SCB_Black; } else { btn01.Background = SCB_White; btn01.BorderBrush = SCB_Black; }
             if (b00) { btn00.Background = SCB_Color; btn00.BorderBrush = SCB_Black; } else { btn00.Background = SCB_White; btn00.BorderBrush = SCB_Black; }
 
+        }
 
- 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+
+            this.initialiser();
+
+            this.afficher();
+
         }
 
         private void Affh01_Click(object sender, RoutedEventArgs e)
         {
+
+            btnSelected = "BTN_AFFH01";
+
+            this.afficher();
 
         }
 
         private void Affh00_Click(object sender, RoutedEventArgs e)
         {
 
+            btnSelected = "BTN_AFFH00";
+
+            this.afficher();
+
         }
 
         private void Affh11_Click(object sender, RoutedEventArgs e)
         {
+
+            btnSelected = "BTN_AFFH11";
+
+            this.afficher();
 
         }
 
         private void Affh10_Click(object sender, RoutedEventArgs e)
         {
 
+            btnSelected = "BTN_AFFH10";
+
+            this.afficher();
+
         }
 
         private void Affh21_Click(object sender, RoutedEventArgs e)
         {
+
+            btnSelected = "BTN_AFFH21";
+
+            this.afficher();
 
         }
 
         private void Affh20_Click(object sender, RoutedEventArgs e)
         {
 
+            btnSelected = "BTN_AFFH20";
+
+            this.afficher();
+
         }
 
         private void Affh31_Click(object sender, RoutedEventArgs e)
         {
+
+            btnSelected = "BTN_AFFH31";
+
+            this.afficher();
 
         }
 
         private void Affh30_Click(object sender, RoutedEventArgs e)
         {
 
+            btnSelected = "BTN_AFFH30";
+
+            this.afficher();
+
         }
 
         private void Affh41_Click(object sender, RoutedEventArgs e)
         {
 
+            btnSelected = "BTN_AFFH41";
+
+            this.afficher();
+
         }
 
         private void Affh40_Click(object sender, RoutedEventArgs e)
         {
+
+            btnSelected = "BTN_AFFH40";
+
+            this.afficher();
 
         }
 
@@ -400,6 +451,8 @@ namespace Pixel
         {
 
             this.initialiser();
+
+            this.afficher();
 
         }
 
@@ -442,83 +495,164 @@ namespace Pixel
 
         }
 
+        private void saisir(String message)
+        {
+
+            if (btnSelected.Equals("BTN_AFFH01")) { affh01.Content = message; btnSelected = "BTN_AFFH00"; }
+            else if (btnSelected.Equals("BTN_AFFH00")) { affh00.Content = message; btnSelected = "BTN_AFFH11"; }
+            else if (btnSelected.Equals("BTN_AFFH11")) { affh11.Content = message; btnSelected = "BTN_AFFH10"; }
+            else if (btnSelected.Equals("BTN_AFFH10")) { affh10.Content = message; btnSelected = "BTN_AFFH21"; }
+            else if (btnSelected.Equals("BTN_AFFH21")) { affh21.Content = message; btnSelected = "BTN_AFFH20"; }
+            else if (btnSelected.Equals("BTN_AFFH20")) { affh20.Content = message; btnSelected = "BTN_AFFH31"; }
+            else if (btnSelected.Equals("BTN_AFFH31")) { affh31.Content = message; btnSelected = "BTN_AFFH30"; }
+            else if (btnSelected.Equals("BTN_AFFH30")) { affh30.Content = message; btnSelected = "BTN_AFFH41"; }
+            else if (btnSelected.Equals("BTN_AFFH41")) { affh41.Content = message; btnSelected = "BTN_AFFH40"; }
+            else if (btnSelected.Equals("BTN_AFFH40")) { affh40.Content = message; btnSelected = "BTN_AFFH01"; }
+
+        }
+ 
         private void C0_Click(object sender, RoutedEventArgs e)
         {
+
+            this.saisir("0");
+
+            this.afficher();
 
         }
 
         private void C1_Click(object sender, RoutedEventArgs e)
         {
 
+            this.saisir("1");
+
+            this.afficher();
+
         }
 
         private void C2_Click(object sender, RoutedEventArgs e)
         {
+
+            this.saisir("2");
+
+            this.afficher();
 
         }
 
         private void C3_Click(object sender, RoutedEventArgs e)
         {
 
+            this.saisir("3");
+
+            this.afficher();
+
+
         }
 
         private void C4_Click(object sender, RoutedEventArgs e)
         {
+
+            this.saisir("4");
+
+            this.afficher();
 
         }
 
         private void C5_Click(object sender, RoutedEventArgs e)
         {
 
+            this.saisir("5");
+
+            this.afficher();
+
         }
 
         private void C6_Click(object sender, RoutedEventArgs e)
         {
+
+            this.saisir("6");
+
+            this.afficher();
 
         }
 
         private void C7_Click(object sender, RoutedEventArgs e)
         {
 
+            this.saisir("7");
+
+            this.afficher();
+
         }
 
         private void C8_Click(object sender, RoutedEventArgs e)
         {
+
+            this.saisir("8");
+
+            this.afficher();
 
         }
 
         private void C9_Click(object sender, RoutedEventArgs e)
         {
 
+            this.saisir("9");
+
+            this.afficher();
+
         }
 
         private void CA_Click(object sender, RoutedEventArgs e)
         {
+
+            this.saisir("A");
+
+            this.afficher();
 
         }
 
         private void CB_Click(object sender, RoutedEventArgs e)
         {
 
+            this.saisir("B");
+
+            this.afficher();
+
         }
 
         private void CC_Click(object sender, RoutedEventArgs e)
         {
+
+            this.saisir("C");
+
+            this.afficher();
 
         }
 
         private void CD_Click(object sender, RoutedEventArgs e)
         {
 
+            this.saisir("D");
+
+            this.afficher();
+
         }
 
         private void CE_Click(object sender, RoutedEventArgs e)
         {
 
+            this.saisir("E");
+
+            this.afficher();
+
         }
 
         private void CF_Click(object sender, RoutedEventArgs e)
         {
+
+            this.saisir("F");
+
+            this.afficher();
 
         }
 
