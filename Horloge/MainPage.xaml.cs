@@ -30,7 +30,7 @@ using LCDDisplayDriver;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace Reveil
+namespace Horloge
 {
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
@@ -56,18 +56,9 @@ namespace Reveil
         ushort[] maky = new ushort[80 * 80];
         ushort[] mfp2019 = new ushort[240 * 320];
         ushort[] reveil = new ushort[80 * 80];
-        ushort[] reveil_ko = new ushort[80 * 80];
-        ushort[] reveil_ok = new ushort[80 * 80];
         ushort[] rpi = new ushort[80 * 80];
         ushort[] win = new ushort[80 * 80];
         ushort[] win10iot = new ushort[240 * 320];
-
-        ushort[] MD = new ushort[48 * 48];
-        ushort[] HP = new ushort[48 * 48];
-        ushort[] HM = new ushort[48 * 48];
-        ushort[] MP = new ushort[48 * 48];
-        ushort[] MM = new ushort[48 * 48];
-        ushort[] KO = new ushort[48 * 48];
 
         int color = _SpiDisplayDriver.RGB888ToRGB565(226, 010, 023);
 
@@ -83,12 +74,6 @@ namespace Reveil
         String reveil_heure = "06";
         String reveil_minute = "30";
 
-        // Variable liées au mode
-        String mode = "Horloge";
-
-        bool flagMode = false;
-
-
         public MainPage()
         {
 
@@ -100,7 +85,7 @@ namespace Reveil
             // Initialisation du GPIO
             this.InitGpio();
 
-            // Initialisation de l'affichage
+            // Initialisation de l'affichage LCD
             this.InitSpiDisplay();
 
             // Initialisation du Timer
@@ -115,18 +100,9 @@ namespace Reveil
             _SpiDisplayDriver.LoadFile(maky, 80, 80, "ms-appx:///MFP2019/maky.png");
             _SpiDisplayDriver.LoadFile(mfp2019, 240, 320, "ms-appx:///MFP2019/mfp2019.png");
             _SpiDisplayDriver.LoadFile(reveil, 80, 80, "ms-appx:///MFP2019/reveil.png");
-            _SpiDisplayDriver.LoadFile(reveil_ko, 80, 80, "ms-appx:///MFP2019/reveil_ko.png");
-            _SpiDisplayDriver.LoadFile(reveil_ok, 80, 80, "ms-appx:///MFP2019/reveil_ok.png");
             _SpiDisplayDriver.LoadFile(rpi, 80, 80, "ms-appx:///MFP2019/rpi.png");
             _SpiDisplayDriver.LoadFile(win, 80, 80, "ms-appx:///MFP2019/win.png");
             _SpiDisplayDriver.LoadFile(win10iot, 240, 320, "ms-appx:///MFP2019/win10iot.png");
-
-            _SpiDisplayDriver.LoadFile(MD, 48, 48, "ms-appx:///MFP2019/MD.png");
-            _SpiDisplayDriver.LoadFile(HP, 48, 48, "ms-appx:///MFP2019/HP.png");
-            _SpiDisplayDriver.LoadFile(HM, 48, 48, "ms-appx:///MFP2019/HM.png");
-            _SpiDisplayDriver.LoadFile(MP, 48, 48, "ms-appx:///MFP2019/MP.png");
-            _SpiDisplayDriver.LoadFile(MM, 48, 48, "ms-appx:///MFP2019/MM.png");
-            _SpiDisplayDriver.LoadFile(KO, 48, 48, "ms-appx:///MFP2019/KO.png");
 
         }
 
@@ -182,15 +158,7 @@ namespace Reveil
             _SpiDisplayDriver.DrawPicture20(rpi, 80, 80, 0, 0);
             _SpiDisplayDriver.DrawPicture20(win, 80, 80, 80, 0);
             _SpiDisplayDriver.DrawPicture20(maky, 80, 80, 160, 0);
-            _SpiDisplayDriver.DrawPicture20(reveil_ko, 80, 80, 0, 190);
-
-            // Dessin des boutons
-            _SpiDisplayDriver.DrawPicture20(MD, 48, 48, 0, 270);
-
-            _SpiDisplayDriver.DrawPicture20(HP, 48, 48, 48, 270);
-            _SpiDisplayDriver.DrawPicture20(HM, 48, 48, 96, 270);
-            _SpiDisplayDriver.DrawPicture20(MP, 48, 48, 144, 270);
-            _SpiDisplayDriver.DrawPicture20(MM, 48, 48, 192, 270);
+            _SpiDisplayDriver.DrawPicture20(reveil, 80, 80, 0, 220);
 
         }
 
@@ -202,12 +170,6 @@ namespace Reveil
             dispatcherTimer.Tick += DispatcherTimer_Tick;
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 200);
             dispatcherTimer.Start();
-
-            // Configuration du Timer Reveil
-            DispatcherTimer dispatcherTimerReveil = new DispatcherTimer();
-            dispatcherTimerReveil.Tick += DispatcherTimerReveil_Tick;
-            dispatcherTimerReveil.Interval = new TimeSpan(0, 0, 0, 0, 500);
-            dispatcherTimerReveil.Start();
 
         }
 
@@ -262,7 +224,7 @@ namespace Reveil
             _SpiDisplayDriver.Print(date_annee, 3, color);
 
             // Affichage du reveil
-            _SpiDisplayDriver.PlaceCursor(100, 200);
+            _SpiDisplayDriver.PlaceCursor(100, 240);
 
             reveil_heure = TwoChar(reveil_heure);
             reveil_minute = TwoChar(reveil_minute);
@@ -288,7 +250,7 @@ namespace Reveil
         private String DayWeek(string c)
         {
 
-            if (c.Equals("Monday"))
+            if( c.Equals("Monday") )
             {
 
                 c = "lun";
@@ -334,71 +296,6 @@ namespace Reveil
 
         }
 
-        private void DispatcherTimerReveil_Tick(object sender, object e)
-        {
-
-            if ( mode.Equals("Reveil") && !flagMode )
-            {
-
-                if( reveil_heure.Equals( temps_heure ) )
-                {
-
-                    if (reveil_minute.Equals( temps_minute ) )
-                    {
-
-                        this.sonner();
-
-                    }
-
-                }
-
-
-            }
-            else if( mode.Equals("Horloge") && flagMode )
-            {
-
-                mode = "Reveil";
-                flagMode = false;
-
-                _SpiDisplayDriver.DrawPicture20(reveil_ok, 80, 80, 0, 190);
-
-                _SpiDisplayDriver.DrawPicture20(KO, 48, 48, 48, 270);
-                _SpiDisplayDriver.DrawPicture20(KO, 48, 48, 96, 270);
-                _SpiDisplayDriver.DrawPicture20(KO, 48, 48, 144, 270);
-                _SpiDisplayDriver.DrawPicture20(KO, 48, 48, 192, 270);
-
-            }
-            else if( mode.Equals("Reveil") && flagMode )
-            {
-
-                mode = "Horloge";
-                flagMode = false;
-
-                _SpiDisplayDriver.DrawPicture20(reveil_ko, 80, 80, 0, 190);
-
-                _SpiDisplayDriver.DrawPicture20(HP, 48, 48, 48, 270);
-                _SpiDisplayDriver.DrawPicture20(HM, 48, 48, 96, 270);
-                _SpiDisplayDriver.DrawPicture20(MP, 48, 48, 144, 270);
-                _SpiDisplayDriver.DrawPicture20(MM, 48, 48, 192, 270);
-
-            }
-
-        }
-
-        private async void sonner()
-        {
-
-            _pin21.Write(GpioPinValue.High);
-
-            await Task.Delay(250);
-
-            _pin21.Write(GpioPinValue.Low);
-
-            await Task.Delay(250);
-
-        }
-
-
         // Action sur les boutons
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -424,8 +321,7 @@ namespace Reveil
             if (args.Edge == GpioPinEdge.RisingEdge)
             {
 
-                flagMode = true;
-
+                color = _SpiDisplayDriver.RGB888ToRGB565(127, 127, 127);
             }
 
         }
@@ -438,12 +334,7 @@ namespace Reveil
             if (args.Edge == GpioPinEdge.RisingEdge)
             {
 
-                if( mode.Equals("Horloge") )
-                {
-
-                    reveil_heure = Util.Convert.addHour( reveil_heure );
-                }
-
+                color = _SpiDisplayDriver.RGB888ToRGB565(255, 255, 255);
             }
 
         }
@@ -456,12 +347,7 @@ namespace Reveil
             if (args.Edge == GpioPinEdge.RisingEdge)
             {
 
-                if (mode.Equals("Horloge"))
-                {
-
-                    reveil_heure = Util.Convert.removeHour(reveil_heure);
-                }
-
+                color = _SpiDisplayDriver.RGB888ToRGB565(0, 255, 0);
             }
 
         }
@@ -474,12 +360,8 @@ namespace Reveil
             if (args.Edge == GpioPinEdge.RisingEdge)
             {
 
-                if (mode.Equals("Horloge"))
-                {
-
-                    reveil_minute = Util.Convert.addMinute(reveil_minute);
-                }
-
+                color = _SpiDisplayDriver.RGB888ToRGB565(0, 0, 255);
+                
             }
 
         }
@@ -492,11 +374,7 @@ namespace Reveil
             if (args.Edge == GpioPinEdge.RisingEdge)
             {
 
-                if (mode.Equals("Horloge"))
-                {
-
-                    reveil_minute = Util.Convert.removeMinute(reveil_minute);
-                }
+                color = _SpiDisplayDriver.RGB888ToRGB565(255, 255, 0);
 
             }
 
