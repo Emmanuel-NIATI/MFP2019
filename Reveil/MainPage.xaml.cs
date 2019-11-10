@@ -62,12 +62,12 @@ namespace Reveil
         ushort[] win = new ushort[80 * 80];
         ushort[] win10iot = new ushort[240 * 320];
 
-        ushort[] MD = new ushort[48 * 48];
-        ushort[] HP = new ushort[48 * 48];
-        ushort[] HM = new ushort[48 * 48];
-        ushort[] MP = new ushort[48 * 48];
-        ushort[] MM = new ushort[48 * 48];
-        ushort[] KO = new ushort[48 * 48];
+        ushort[] MD = new ushort[40 * 40];
+        ushort[] HP = new ushort[40 * 40];
+        ushort[] HM = new ushort[40 * 40];
+        ushort[] MP = new ushort[40 * 40];
+        ushort[] MM = new ushort[40 * 40];
+        ushort[] KO = new ushort[40 * 40];
 
         int color = _SpiDisplayDriver.RGB888ToRGB565(226, 010, 023);
 
@@ -121,12 +121,13 @@ namespace Reveil
             _SpiDisplayDriver.LoadFile(win, 80, 80, "ms-appx:///MFP2019/win.png");
             _SpiDisplayDriver.LoadFile(win10iot, 240, 320, "ms-appx:///MFP2019/win10iot.png");
 
-            _SpiDisplayDriver.LoadFile(MD, 48, 48, "ms-appx:///MFP2019/MD.png");
-            _SpiDisplayDriver.LoadFile(HP, 48, 48, "ms-appx:///MFP2019/HP.png");
-            _SpiDisplayDriver.LoadFile(HM, 48, 48, "ms-appx:///MFP2019/HM.png");
-            _SpiDisplayDriver.LoadFile(MP, 48, 48, "ms-appx:///MFP2019/MP.png");
-            _SpiDisplayDriver.LoadFile(MM, 48, 48, "ms-appx:///MFP2019/MM.png");
-            _SpiDisplayDriver.LoadFile(KO, 48, 48, "ms-appx:///MFP2019/KO.png");
+            _SpiDisplayDriver.LoadFile(MD, 40, 40, "ms-appx:///MFP2019/MD.png");
+            _SpiDisplayDriver.LoadFile(HP, 40, 40, "ms-appx:///MFP2019/HP.png");
+            _SpiDisplayDriver.LoadFile(HM, 40, 40, "ms-appx:///MFP2019/HM.png");
+            _SpiDisplayDriver.LoadFile(MP, 40, 40, "ms-appx:///MFP2019/MP.png");
+            _SpiDisplayDriver.LoadFile(MM, 40, 40, "ms-appx:///MFP2019/MM.png");
+
+            _SpiDisplayDriver.LoadFile(KO, 40, 40, "ms-appx:///MFP2019/KO.png");
 
         }
 
@@ -185,12 +186,12 @@ namespace Reveil
             _SpiDisplayDriver.DrawPicture20(reveil_ko, 80, 80, 0, 190);
 
             // Dessin des boutons
-            _SpiDisplayDriver.DrawPicture20(MD, 48, 48, 0, 270);
+            _SpiDisplayDriver.DrawPicture20(MD, 40, 40, 4, 270);
 
-            _SpiDisplayDriver.DrawPicture20(HP, 48, 48, 48, 270);
-            _SpiDisplayDriver.DrawPicture20(HM, 48, 48, 96, 270);
-            _SpiDisplayDriver.DrawPicture20(MP, 48, 48, 144, 270);
-            _SpiDisplayDriver.DrawPicture20(MM, 48, 48, 192, 270);
+            _SpiDisplayDriver.DrawPicture20(HP, 40, 40, 52, 270);
+            _SpiDisplayDriver.DrawPicture20(HM, 40, 40, 100, 270);
+            _SpiDisplayDriver.DrawPicture20(MP, 40, 40, 148, 270);
+            _SpiDisplayDriver.DrawPicture20(MM, 40, 40, 196, 270);
 
         }
 
@@ -251,15 +252,16 @@ namespace Reveil
             date_sem = DayWeek(date_sem);
             date_jour = TwoChar(date_jour);
             date_mois = TwoChar(date_mois);
+            date_mois = Month(date_mois);
             date_annee = TwoChar(date_annee);
 
             _SpiDisplayDriver.Print(date_sem, 2, color);
-            _SpiDisplayDriver.Print(" ", 3, color);
-            _SpiDisplayDriver.Print(date_jour, 3, color);
-            _SpiDisplayDriver.Print("/", 3, color);
-            _SpiDisplayDriver.Print(date_mois, 3, color);
-            _SpiDisplayDriver.Print("/", 3, color);
-            _SpiDisplayDriver.Print(date_annee, 3, color);
+            _SpiDisplayDriver.Print(" ", 2, color);
+            _SpiDisplayDriver.Print(date_jour, 2, color);
+            _SpiDisplayDriver.Print(" ", 2, color);
+            _SpiDisplayDriver.Print(date_mois, 2, color);
+            _SpiDisplayDriver.Print(" ", 2, color);
+            _SpiDisplayDriver.Print(date_annee, 2, color);
 
             // Affichage du reveil
             _SpiDisplayDriver.PlaceCursor(100, 200);
@@ -334,6 +336,85 @@ namespace Reveil
 
         }
 
+        private String Month(string c)
+        {
+
+            if (c.Equals("01"))
+            {
+
+                c = "janv.";
+            }
+
+            if (c.Equals("02"))
+            {
+
+                c = "fev.";
+            }
+
+            if (c.Equals("03"))
+            {
+
+                c = "mars";
+            }
+
+            if (c.Equals("04"))
+            {
+
+                c = "avr.";
+            }
+
+            if (c.Equals("05"))
+            {
+
+                c = "mai";
+            }
+
+            if (c.Equals("06"))
+            {
+
+                c = "juin";
+            }
+
+            if (c.Equals("07"))
+            {
+
+                c = "juil.";
+            }
+
+            if (c.Equals("08"))
+            {
+
+                c = "aout";
+            }
+
+            if (c.Equals("09"))
+            {
+
+                c = "sept.";
+            }
+
+            if (c.Equals("10"))
+            {
+
+                c = "oct.";
+            }
+
+            if (c.Equals("11"))
+            {
+
+                c = "nov.";
+            }
+
+            if (c.Equals("12"))
+            {
+
+                c = "dec.";
+            }
+
+            return c;
+
+        }
+
         private void DispatcherTimerReveil_Tick(object sender, object e)
         {
 
@@ -362,10 +443,10 @@ namespace Reveil
 
                 _SpiDisplayDriver.DrawPicture20(reveil_ok, 80, 80, 0, 190);
 
-                _SpiDisplayDriver.DrawPicture20(KO, 48, 48, 48, 270);
-                _SpiDisplayDriver.DrawPicture20(KO, 48, 48, 96, 270);
-                _SpiDisplayDriver.DrawPicture20(KO, 48, 48, 144, 270);
-                _SpiDisplayDriver.DrawPicture20(KO, 48, 48, 192, 270);
+                _SpiDisplayDriver.DrawPicture20(KO, 40, 40, 52, 270);
+                _SpiDisplayDriver.DrawPicture20(KO, 40, 40, 100, 270);
+                _SpiDisplayDriver.DrawPicture20(KO, 40, 40, 148, 270);
+                _SpiDisplayDriver.DrawPicture20(KO, 40, 40, 196, 270);
 
             }
             else if( mode.Equals("Reveil") && flagMode )
@@ -376,10 +457,10 @@ namespace Reveil
 
                 _SpiDisplayDriver.DrawPicture20(reveil_ko, 80, 80, 0, 190);
 
-                _SpiDisplayDriver.DrawPicture20(HP, 48, 48, 48, 270);
-                _SpiDisplayDriver.DrawPicture20(HM, 48, 48, 96, 270);
-                _SpiDisplayDriver.DrawPicture20(MP, 48, 48, 144, 270);
-                _SpiDisplayDriver.DrawPicture20(MM, 48, 48, 192, 270);
+                _SpiDisplayDriver.DrawPicture20(HP, 40, 40, 52, 270);
+                _SpiDisplayDriver.DrawPicture20(HM, 40, 40, 100, 270);
+                _SpiDisplayDriver.DrawPicture20(MP, 40, 40, 148, 270);
+                _SpiDisplayDriver.DrawPicture20(MM, 40, 40, 196, 270);
 
             }
 
